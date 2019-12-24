@@ -1,13 +1,16 @@
 import React from 'react';
+import Channels from './Channels';
+import Chat from './Chat';
 
-class App extends React.Component {
-  render() {
-    const { gon } = this.props;
-    return (gon.channels.map((el) => (
-      <div key={el.id}>
-        <p>{el.name}</p>
+const App = () => (
+  <>
+    <div className="container">
+      <div className="row">
+        <Channels />
+        <Chat />
       </div>
-    )));
-  }
-}
+    </div>
+  </>
+);
+
 export default App;
