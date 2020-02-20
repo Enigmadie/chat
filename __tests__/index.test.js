@@ -1,10 +1,7 @@
-import path from 'path';
 import buildApp from '../server';
 
-const buildUrl = (url) => path.join('/api/v1/', url);
-
 test('get /', async () => {
-  const app = buildApp();
+  const app = buildApp({ port: 5000 });
   const response = await app.inject({
     url: '/',
   });

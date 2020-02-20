@@ -1,3 +1,5 @@
+[![Github Actions Status](https://github.com/hexlet-components/projects-frontend-l4-server/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-components/projects-frontend-l4-server/actions)
+
 ### Requirements
 
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
@@ -13,4 +15,3 @@ $ make install
 ```sh
 $ make start
 ```
-https://dashboard.heroku.com/apps/enigma-chat-slack

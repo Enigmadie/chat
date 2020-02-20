@@ -1,16 +1,25 @@
 import React from 'react';
-import Channels from './Channels';
-import Chat from './Chat';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+
+import Channels from '../features/channels/Channels';
+import ChatLog from '../features/messages/ChatLog';
+import ChatInput from '../features/messages/ChatInput';
 
 const App = () => (
-  <>
-    <div className="container">
-      <div className="row">
+  <Container>
+    <Row>
+      <div className="col-2">
         <Channels />
-        <Chat />
       </div>
-    </div>
-  </>
+      <div className="col-10">
+        <Container>
+          <ChatLog />
+          <ChatInput />
+        </Container>
+      </div>
+    </Row>
+  </Container>
 );
 
 export default App;

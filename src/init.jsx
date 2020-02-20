@@ -2,33 +2,27 @@ import '@babel/polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, compose, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import reducers from './reducers';
+import { configureStore } from '@reduxjs/toolkit';
 import App from './components/App.jsx';
 import UserContext from './UserContext';
-import * as actions from './actions';
+import rootReducer from './reducers';
+import { fetchDateFromServer as fetchMessages, addMessageSuccess } from './features/messages/messagesSlice.js';
+import { fetchDateFromServer as fetchChannels } from './features/channels/channelsSlice.js';
 
 const init = (gon, cookies, io) => {
-  /* eslint-disable no-underscore-dangle */
-  const ext = window.__REDUX_DEVTOOLS_EXTENSION__;
-  const devtoolMiddleware = ext && ext();
-  /* eslint-enable */
-
-  const store = createStore(
-    reducers,
-    gon,
-    compose(
-      applyMiddleware(thunk),
-      devtoolMiddleware,
-    ),
-  );
-
   const socket = io();
 
-  socket.on('newMessage', (payload) => {
-    store.dispatch(actions.addMessageSuccess({ message: payload.data.attributes }));
+  const store = configureStore({
+    reducer: rootReducer,
   });
+
+  store.dispatch(fetchChannels(gon));
+  store.dispatch(fetchMessages(gon));
+
+  socket.on('newMessage', ({ data }) => {
+    store.dispatch(addMessageSuccess({ message: data.attributes.text }));
+  });
+
   render(
     <Provider store={store}>
       <UserContext.Provider value={cookies.get('name')}>
