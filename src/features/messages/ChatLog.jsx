@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
   messages: state.messages,
 });
 
-const ChatLog = ({ messages }) => (
-  <div className="row overflow-auto chat">
-    {messages.map(({ id, name, text }) => (
-      <span className="col-12" key={id}>
-        {name}
-        :
-        {text}
-      </span>
-    ))}
-  </div>
-);
+const ChatLog = ({ messages }) => {
+  useEffect(() => {
+    const logContainer = document.querySelector('.chat');
+    logContainer.scrollTop = logContainer.scrollHeight;
+  });
+
+  return (
+    <div className="column overflow-auto chat">
+      {messages.map(({ id, name, text }) => (
+        <p key={id}>
+          {name}
+          :
+          {text}
+        </p>
+      ))}
+    </div>
+  );
+};
 
 export default connect(mapStateToProps)(ChatLog);

@@ -20,7 +20,7 @@ const init = (gon, cookies, io) => {
   store.dispatch(fetchMessages(gon));
 
   socket.on('newMessage', ({ data }) => {
-    store.dispatch(addMessageSuccess({ message: data.attributes.text }));
+    store.dispatch(addMessageSuccess({ message: data.attributes }));
   });
 
   render(
