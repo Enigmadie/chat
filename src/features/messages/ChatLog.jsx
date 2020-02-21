@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => ({
-  messages: state.messages,
+  messages: state.messages.data,
 });
 
 const ChatLog = ({ messages }) => {

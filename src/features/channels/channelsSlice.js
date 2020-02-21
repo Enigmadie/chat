@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
+
+const initialState = {
+  data: [],
+};
 
 const channelsSlice = createSlice({
   name: 'channels',
-  initialState: [],
+  initialState,
   reducers: {
     fetchDateFromServer(state, { payload: { channels } }) {
-      return channels;
+      _.assignIn(state.data, channels);
     },
   },
 });
