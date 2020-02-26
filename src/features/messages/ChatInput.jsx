@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import cn from 'classnames';
 
-import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import UserContext from '../../UserContext';
 import { addMessage } from './messagesSlice';
@@ -14,7 +14,7 @@ const mapDispatchToProps = { addNewMessage: addMessage };
 const ChatInput = ({ addNewMessage }) => {
   const name = React.useContext(UserContext);
   return (
-    <Row>
+    <Col>
       <Formik
         initialValues={{
           message: '',
@@ -35,6 +35,7 @@ const ChatInput = ({ addNewMessage }) => {
           const isDisabled = isInvalidMessage || isSubmitting;
 
           const inputClass = cn({
+            'w-75': true,
             'form-control is-invalid': isInvalidMessage,
           });
 
@@ -48,7 +49,7 @@ const ChatInput = ({ addNewMessage }) => {
         }}
 
       </Formik>
-    </Row>
+    </Col>
   );
 };
 

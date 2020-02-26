@@ -5,8 +5,8 @@ html.h-100(lang="en")
     // script(src=assetPath('main.css'))
     script.
       var gon = !{JSON.stringify(gon)};
-  body.d-flex.flex-column.h-100
-    nav.navbar.navbar-expand-lg.navbar-light.bg-faded
+  body.d-flex.flex-column.h-100.bg-light
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
       a.navbar-brand(href="/") Chat
       button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
         span.navbar-toggler-icon
@@ -14,7 +14,7 @@ html.h-100(lang="en")
         ul.navbar-nav.mr-auto
           li.nav-item.active
             a.nav-link(href="/") Home
-    .container.h-100.overflow-hidden
+    .container-fluid.h-100.overflow-hidden
       .h-100#chat
       // block content
     script(src=assetPath('main.js'))

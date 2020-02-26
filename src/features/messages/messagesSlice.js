@@ -6,14 +6,18 @@ import routes from '../../routes';
 const initialState = {
   data: [],
   postAddingState: 'none',
+  postFetchingState: 'none',
 };
 
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    fetchDateFromServer(state, { payload: { messages } }) {
+    fetchMessagesFromServer(state, { payload: { messages } }) {
+      const currentState = state;
+      currentState.postFetchingState = 'finished';
       _.assignIn(state.data, messages);
+      return currentState;
     },
     addMessageRequest(state) {
       const currentState = state;
@@ -35,7 +39,7 @@ const messagesSlice = createSlice({
 });
 
 export const {
-  fetchDateFromServer,
+  fetchMessagesFromServer,
   addMessageSuccess,
   addMessageRequest,
   addMessageFailure,

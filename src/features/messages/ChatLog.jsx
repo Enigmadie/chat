@@ -12,7 +12,7 @@ const ChatLog = ({ messages }) => {
   });
 
   return (
-    <div className="column overflow-auto chat">
+    <div className="column h-75 overflow-auto chat">
       {messages.map(({ id, name, text }) => (
         <p key={id}>
           {name}
