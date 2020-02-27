@@ -1,34 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import Channel from './Channel.jsx';
-import UserContext from '../../UserContext';
+import ModalChannel from './ModalChannel.jsx';
+import { addChannel, switchChannel as switchNewChannel } from './channelsSlice';
 
 const mapStateToProps = (state) => ({
-  channels: state.channels,
+  channels: state.channels.data,
 });
 
-const ChannelsList = ({ channels }) => {
-  const name = React.useContext(UserContext);
+const mapDispatchToProps = { addChannel, switchChannel: switchNewChannel };
+
+const ChannelsList = ({ channels, switchChannel }) => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
-    <Container fluid className="py-3 px-0 h-100">
-      <p className="pl-2 mb-1 pt-3">Name</p>
-      <p className="pl-4 pb-4 text-secondary border-bottom">{name}</p>
+    <>
       <p className="pl-2 mb-1 ">Channels</p>
-      <ListGroup variant="flush" className='h-100'>
-        <Col>
-          {channels.data.map((channel) => (
-            <Channel key={channel.id} name={channel.name} className="list-group" id="list-tab" role="tablist" />
-          ))}
-        </Col>
-        <ListGroup.Item action className="align-bottom text-secondary border-0 bg-light py-1">
-          Add new channel
-        </ListGroup.Item>
+      <ListGroup variant="flush" className="flex-grow-1">
+        {channels.map(({ id, name }) => (
+          <Channel
+            key={id}
+            name={name}
+            onClick={() => switchChannel({ currentChannelId: id })}
+            className="list-group"
+            id="list-tab"
+            role="tablist"
+          />
+        ))}
       </ListGroup>
-    </Container>
+      <Button onClick={handleShow} variant="secondary" size="lg" className="rounded-0" block>
+        + Add new channel
+      </Button>
+      <ModalChannel show={show} onHide={handleClose} />
+    </>
   );
 };
 
-export default connect(mapStateToProps)(ChannelsList);
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelsList);

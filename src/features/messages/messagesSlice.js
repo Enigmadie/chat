@@ -45,10 +45,19 @@ export const {
   addMessageFailure,
 } = messagesSlice.actions;
 
-export const addMessage = ({ message }) => async (dispatch) => {
+export const addMessage = ({ message, channelId }) => async (dispatch) => {
+  const path = routes.channelMessagesPath(channelId);
+
   dispatch(addMessageRequest());
   try {
-    await axios.post(routes.channelMessagesPath('0'), { data: { attributes: { text: message.text, name: message.name } } });
+    await axios.post(path, {
+      data: {
+        attributes: {
+          text: message.text,
+          name: message.name,
+        },
+      },
+    });
   } catch (e) {
     dispatch(addMessageFailure());
     throw e;
