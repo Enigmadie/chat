@@ -10,13 +10,29 @@ const mapStateToProps = (state) => ({
   channels: state.channels.data,
 });
 
-const mapDispatchToProps = { addChannel, switchChannel: switchNewChannel };
+const mapDispatchToProps = { addNewChannel: addChannel, switchChannel: switchNewChannel };
 
 const ChannelsList = ({ channels, switchChannel }) => {
   const [show, setShow] = useState(false);
+  const [value, setValue] = useState('');
+  const [modalAction, setModalAction] = useState('add');
+
+  const handleModalAdd = () => {
+    setModalAction('add');
+    setShow(true);
+  };
+
+  const handleModalEdit = () => {
+    setModalAction('edit');
+    setShow(true);
+  };
+
+  const handleModalRemove = () => {
+    setModalAction('remove');
+    setShow(true);
+  };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -27,16 +43,24 @@ const ChannelsList = ({ channels, switchChannel }) => {
             key={id}
             name={name}
             onClick={() => switchChannel({ currentChannelId: id })}
+            handleModalEdit={handleModalEdit}
+            handleModalRemove={handleModalRemove}
+            setValue={setValue}
             className="list-group"
             id="list-tab"
             role="tablist"
           />
         ))}
       </ListGroup>
-      <Button onClick={handleShow} variant="secondary" size="lg" className="rounded-0" block>
+      <Button onClick={handleModalAdd} variant="secondary" size="lg" className="rounded-0" block>
         + Add new channel
       </Button>
-      <ModalChannel show={show} onHide={handleClose} />
+      <ModalChannel
+        show={show}
+        onHide={handleClose}
+        modalAction={modalAction}
+        value={value}
+      />
     </>
   );
 };

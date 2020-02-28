@@ -61,7 +61,7 @@ export const addChannel = ({ channel }) => async (dispatch) => {
     await axios.post(path, {
       data: {
         attributes: {
-          name: channel.name,
+          name: channel,
         },
       },
     });
@@ -70,5 +70,7 @@ export const addChannel = ({ channel }) => async (dispatch) => {
     throw e;
   }
 };
+
+// export const deleteChannel = ({ id })
 
 export default channelsSlice.reducer;
