@@ -7,7 +7,12 @@ import App from './components/App.jsx';
 import UserContext from './UserContext';
 import rootReducer from './reducers';
 import { fetchMessagesFromServer, addMessageSuccess } from './features/messages/messagesSlice.js';
-import { fetchChannelsFromServer, addChannelSuccess } from './features/channels/channelsSlice.js';
+import {
+  fetchChannelsFromServer,
+  addChannelSuccess,
+  removeChannelSuccess,
+  renameChannelSuccess,
+} from './features/channels/channelsSlice.js';
 
 const init = (gon, cookies, io) => {
   const socket = io();
@@ -26,6 +31,15 @@ const init = (gon, cookies, io) => {
   socket.on('newChannel', ({ data }) => {
     store.dispatch(addChannelSuccess({ channel: data.attributes }));
   });
+
+  socket.on('removeChannel', ({ data }) => {
+    store.dispatch(removeChannelSuccess({ channelId: data.id }));
+  });
+
+  socket.on('renameChannel', ({ data }) => {
+    store.dispatch(renameChannelSuccess({ channelId: data.id, name: data.attributes.name }));
+  });
+
 
   render(
     <Provider store={store}>

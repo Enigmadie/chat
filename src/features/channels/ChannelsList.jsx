@@ -4,17 +4,28 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import Channel from './Channel.jsx';
 import ModalChannel from './ModalChannel.jsx';
-import { addChannel, switchChannel as switchNewChannel } from './channelsSlice';
+import { switchChannel as switchNewChannel } from './channelsSlice';
 
-const mapStateToProps = (state) => ({
-  channels: state.channels.data,
-});
+const mapStateToProps = (state) => {
+  const {
+    channels: {
+      data: {
+        byId,
+        allIds,
+      },
+    },
+  } = state;
 
-const mapDispatchToProps = { addNewChannel: addChannel, switchChannel: switchNewChannel };
+  const channels = allIds.map((id) => byId[id]);
+  return { channels };
+};
+
+const mapDispatchToProps = { switchChannel: switchNewChannel };
 
 const ChannelsList = ({ channels, switchChannel }) => {
   const [show, setShow] = useState(false);
-  const [value, setValue] = useState('');
+  const [channelName, setChannelName] = useState('');
+  const [channelId, setChannelId] = useState(0);
   const [modalAction, setModalAction] = useState('add');
 
   const handleModalAdd = () => {
@@ -22,12 +33,15 @@ const ChannelsList = ({ channels, switchChannel }) => {
     setShow(true);
   };
 
-  const handleModalEdit = () => {
-    setModalAction('edit');
+  const handleModalRename = (id, name) => {
+    setChannelId(id);
+    setChannelName(name);
+    setModalAction('rename');
     setShow(true);
   };
 
-  const handleModalRemove = () => {
+  const handleModalRemove = (id) => {
+    setChannelId(id);
     setModalAction('remove');
     setShow(true);
   };
@@ -38,14 +52,14 @@ const ChannelsList = ({ channels, switchChannel }) => {
     <>
       <p className="pl-2 mb-1 ">Channels</p>
       <ListGroup variant="flush" className="flex-grow-1">
-        {channels.map(({ id, name }) => (
+        {channels.map(({ id, name, removable }) => (
           <Channel
             key={id}
             name={name}
+            removable={removable}
             onClick={() => switchChannel({ currentChannelId: id })}
-            handleModalEdit={handleModalEdit}
-            handleModalRemove={handleModalRemove}
-            setValue={setValue}
+            handleModalRename={() => handleModalRename(id, name)}
+            handleModalRemove={() => handleModalRemove(id)}
             className="list-group"
             id="list-tab"
             role="tablist"
@@ -59,7 +73,8 @@ const ChannelsList = ({ channels, switchChannel }) => {
         show={show}
         onHide={handleClose}
         modalAction={modalAction}
-        value={value}
+        channelName={channelName}
+        channelId={channelId}
       />
     </>
   );

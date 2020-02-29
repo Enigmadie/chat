@@ -1,10 +1,22 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-const mapStateToProps = (state) => ({
-  messages: state.messages.data,
-  activeChannelId: state.channels.currentChannelId,
-});
+const mapStateToProps = (state) => {
+  const {
+    messages: {
+      data: {
+        byId,
+        allIds,
+      },
+    },
+    channels: {
+      currentChannelId,
+    },
+  } = state;
+
+  const messages = allIds.map((id) => byId[id]);
+  return { messages, activeChannelId: currentChannelId };
+};
 
 const ChatLog = ({ messages, activeChannelId }) => {
   useEffect(() => {

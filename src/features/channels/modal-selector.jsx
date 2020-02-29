@@ -1,18 +1,17 @@
 export default {
   add: {
     title: 'Add channel name',
-    button: 'submit',
-    bodyInput: false,
+    button: 'Submit',
+    hasBodyInput: true,
   },
-  edit: {
-    title: 'Edit channel name',
-    button: 'submit',
-    bodyInput: false,
+  rename: {
+    title: 'Rename channel name',
+    button: 'Submit',
+    hasBodyInput: true,
   },
   remove: {
     title: 'Remove channel',
-    button: 'remove',
-    bodyInput: false,
+    button: 'Remove',
+    hasBodyInput: false,
   },
 };
-

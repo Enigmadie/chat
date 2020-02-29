@@ -4,7 +4,7 @@ import _ from 'lodash';
 import routes from '../../routes';
 
 const initialState = {
-  data: [],
+  data: { byId: {}, allIds: [] },
   postAddingState: 'none',
   postFetchingState: 'none',
 };
@@ -15,8 +15,13 @@ const messagesSlice = createSlice({
   reducers: {
     fetchMessagesFromServer(state, { payload: { messages } }) {
       const currentState = state;
+
+      currentState.data = {
+        byId: _.keyBy(messages, 'id'),
+        allIds: messages.map((el) => el.id),
+      };
+
       currentState.postFetchingState = 'finished';
-      _.assignIn(state.data, messages);
       return currentState;
     },
     addMessageRequest(state) {
@@ -25,8 +30,15 @@ const messagesSlice = createSlice({
       return currentState;
     },
     addMessageSuccess(state, { payload: { message } }) {
-      _.assignIn(state.data, [...state.data, message]);
       const currentState = state;
+      const { byId, allIds } = currentState.data;
+      const { id } = message;
+
+      currentState.data = {
+        byId: { [id]: message, ...byId },
+        allIds: [...allIds, id],
+      };
+
       currentState.postAddingState = 'finished';
       return currentState;
     },

@@ -5,23 +5,29 @@ import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
 
 import modalSelector from './modal-selector';
-import { addChannel as addNewChannel } from './channelsSlice';
+import { addChannel as addNewChannel, removeChannel as removeCurrentChannel, renameChannel as renameCurrentChannel } from './channelsSlice';
 
-const mapDispatchToProps = { addChannel: addNewChannel };
+const mapDispatchToProps = {
+  addChannel: addNewChannel,
+  removeChannel: removeCurrentChannel,
+  renameChannel: renameCurrentChannel,
+};
 
 const ModalChannel = ({
   show,
   onHide,
   modalAction,
-  value,
+  channelName,
+  channelId,
   addChannel,
+  renameChannel,
+  removeChannel,
 }) => {
-  const { title, button } = modalSelector[modalAction];
-
+  const { title, button, hasBodyInput } = modalSelector[modalAction];
   const actionSelector = {
     add: addChannel,
-    // 'edit': removeChannel,
-    // 'delete': deleteChannel,
+    remove: removeChannel,
+    rename: renameChannel,
   };
 
   return (
@@ -31,12 +37,13 @@ const ModalChannel = ({
       </Modal.Header>
       <Formik
         initialValues={{
-          inputValue: value,
+          inputValue: channelName,
+          id: channelId,
         }}
 
-        onSubmit={({ inputValue }, { setSubmitting, resetForm }) => {
+        onSubmit={({ inputValue, id }, { setSubmitting, resetForm }) => {
           const currentAction = actionSelector[modalAction];
-          currentAction({ channel: inputValue });
+          currentAction({ id, channel: inputValue });
           resetForm();
           setSubmitting(false);
         }}
@@ -44,9 +51,11 @@ const ModalChannel = ({
         {({ isSubmitting }) => {
           return (
             <Form>
-              <Modal.Body>
-                <Field type="test" name="inputValue" />
-              </Modal.Body>
+              {hasBodyInput && (
+                <Modal.Body>
+                  <Field type="test" name="inputValue" />
+                </Modal.Body>
+              )}
               <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>
                   Close
@@ -63,5 +72,4 @@ const ModalChannel = ({
   );
 };
 
-// export default ModalChannel;
-export default connect(null, mapDispatchToProps)(ModalChannel)
+export default connect(null, mapDispatchToProps)(ModalChannel);
