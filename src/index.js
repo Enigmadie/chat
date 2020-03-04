@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 cookies.set('name', faker.name.findName());
 
-init(gon, cookies, io)
+init(gon, cookies, io);
 
 console.log('it works!');
 console.log('gon', gon);

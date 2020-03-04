@@ -2,9 +2,9 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import ChannelsList from '../features/channels/ChannelsList';
-import ChatLog from '../features/messages/ChatLog';
-import ChatInput from '../features/messages/ChatInput';
+import ChannelsList from './Channels/ChannelsList';
+import ChatLog from './ChatLog';
+import ChatInput from './ChatInput';
 import UserContext from '../UserContext';
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
       </Col>
       <Col xs={8} className="border p-0 pb-3 bg-white vh-87">
         <ChatLog />
-        <ChatInput />
+        <ChatInput name={name} />
       </Col>
     </Row>
   );

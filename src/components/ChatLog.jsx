@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import connect from '../connect';
 
 const mapStateToProps = (state) => {
   const {
@@ -9,13 +9,13 @@ const mapStateToProps = (state) => {
         allIds,
       },
     },
-    channels: {
-      currentChannelId,
+    activeChannelId: {
+      id,
     },
   } = state;
 
-  const messages = allIds.map((id) => byId[id]);
-  return { messages, activeChannelId: currentChannelId };
+  const messages = allIds.map((item) => byId[item]);
+  return { messages, activeChannelId: id };
 };
 
 const ChatLog = ({ messages, activeChannelId }) => {

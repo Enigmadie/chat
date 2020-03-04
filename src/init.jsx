@@ -5,39 +5,34 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import App from './components/App.jsx';
 import UserContext from './UserContext';
-import rootReducer from './reducers';
-import { fetchMessagesFromServer, addMessageSuccess } from './features/messages/messagesSlice.js';
-import {
-  fetchChannelsFromServer,
-  addChannelSuccess,
-  removeChannelSuccess,
-  renameChannelSuccess,
-} from './features/channels/channelsSlice.js';
+import reducer, { actions } from './slices';
 
 const init = (gon, cookies, io) => {
   const socket = io();
 
   const store = configureStore({
-    reducer: rootReducer,
+    reducer,
   });
 
-  store.dispatch(fetchChannelsFromServer(gon));
-  store.dispatch(fetchMessagesFromServer(gon));
+  store.dispatch(actions.initChannelsState(gon));
+  store.dispatch(actions.initMessagesState(gon));
+  store.dispatch(actions.initActiveIdState(gon));
 
   socket.on('newMessage', ({ data }) => {
-    store.dispatch(addMessageSuccess({ message: data.attributes }));
+    store.dispatch(actions.addMessageSuccess({ message: data.attributes }));
   });
 
   socket.on('newChannel', ({ data }) => {
-    store.dispatch(addChannelSuccess({ channel: data.attributes }));
+    store.dispatch(actions.addChannelSuccess({ channel: data.attributes }));
   });
 
   socket.on('removeChannel', ({ data }) => {
-    store.dispatch(removeChannelSuccess({ channelId: data.id }));
+    store.dispatch(actions.removeChannelSuccess({ channelId: data.id }));
   });
 
   socket.on('renameChannel', ({ data }) => {
-    store.dispatch(renameChannelSuccess({ channelId: data.id, name: data.attributes.name }));
+    const { name } = data.attributes;
+    store.dispatch(actions.renameChannelSuccess({ channelId: data.id, name }));
   });
 
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+
+import connect from '../../connect';
 import Channel from './Channel.jsx';
 import ModalChannel from './ModalChannel.jsx';
-import { switchChannel as switchNewChannel } from './channelsSlice';
 
 const mapStateToProps = (state) => {
   const {
@@ -19,8 +19,6 @@ const mapStateToProps = (state) => {
   const channels = allIds.map((id) => byId[id]);
   return { channels };
 };
-
-const mapDispatchToProps = { switchChannel: switchNewChannel };
 
 const ChannelsList = ({ channels, switchChannel }) => {
   const [show, setShow] = useState(false);
@@ -74,10 +72,11 @@ const ChannelsList = ({ channels, switchChannel }) => {
         onHide={handleClose}
         modalAction={modalAction}
         channelName={channelName}
+        setChannelName={setChannelName}
         channelId={channelId}
       />
     </>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChannelsList);
+export default connect(mapStateToProps)(ChannelsList);
