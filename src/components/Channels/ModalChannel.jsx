@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import cn from 'classnames';
+
+import { useTranslation } from 'react-i18next';
 import connect from '../../connect';
 import modalSelector from './modal-selector';
 
@@ -24,7 +26,8 @@ const ModalChannel = ({
     remove: removeChannel,
     rename: renameChannel,
   };
-
+  const { t } = useTranslation();
+  const blankMsg = t('blank');
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -37,7 +40,7 @@ const ModalChannel = ({
         }}
 
         validationSchema={Yup.object().shape({
-          channel: Yup.string().max(25).required('Can\'t be blank'),
+          channel: Yup.string().max(25).required(blankMsg),
         })}
 
         onSubmit={({ channel, id }, { setSubmitting }) => {
@@ -47,9 +50,15 @@ const ModalChannel = ({
           setSubmitting(false);
         }}
       >
-        {({ isSubmitting, errors, touched }) => {
+        {({
+          isSubmitting,
+          errors,
+          values,
+          touched,
+        }) => {
           const isInvalidChannel = errors.channel && touched.channel;
           const isDisabled = isInvalidChannel || isSubmitting;
+
           const isRemovingModal = modalAction === 'remove';
           const buttonVariant = cn({
             danger: isRemovingModal,
@@ -70,7 +79,13 @@ const ModalChannel = ({
                   </>
                 )}
                 {isRemovingModal && (
-                  <p>The channel will be deleted. Are you sure?</p>
+                  <p>
+                    The channel
+                    <b>
+                      {` ${values.channel} `}
+                    </b>
+                    will be deleted. Are you sure?
+                  </p>
                 )}
               </Modal.Body>
               <Modal.Footer>

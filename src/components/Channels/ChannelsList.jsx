@@ -38,8 +38,9 @@ const ChannelsList = ({ channels, switchChannel }) => {
     setShow(true);
   };
 
-  const handleModalRemove = (id) => {
+  const handleModalRemove = (id, name) => {
     setChannelId(id);
+    setChannelName(name);
     setModalAction('remove');
     setShow(true);
   };
@@ -57,7 +58,7 @@ const ChannelsList = ({ channels, switchChannel }) => {
             removable={removable}
             onClick={() => switchChannel({ currentChannelId: id })}
             handleModalRename={() => handleModalRename(id, name)}
-            handleModalRemove={() => handleModalRemove(id)}
+            handleModalRemove={() => handleModalRemove(id, name)}
             className="list-group"
             id="list-tab"
             role="tablist"
