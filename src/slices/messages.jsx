@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import _ from 'lodash';
+import selectErrorMessage from '../utils';
 import routes from '../routes';
 
 const initialState = {
@@ -61,6 +62,7 @@ const addMessage = ({ message, channelId }) => async (dispatch) => {
     });
   } catch (e) {
     dispatch(addMessageFailure());
+    selectErrorMessage(e);
     throw e;
   }
 };

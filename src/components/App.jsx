@@ -1,15 +1,24 @@
 import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { toast } from 'react-toastify';
 
 import ChannelsList from './Channels/ChannelsList';
 import ChatLog from './ChatLog';
 import ChatInput from './ChatInput';
 import UserContext from '../UserContext';
 
+toast.configure({
+  position: 'top-right',
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+});
+
 const App = () => {
   const name = React.useContext(UserContext);
-
   return (
     <Row>
       <Col xs={2} fluid className="pt-3 px-0 bg-light vh-87 d-flex flex-column ">

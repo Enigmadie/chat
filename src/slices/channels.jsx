@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import _ from 'lodash';
+import selectErrorMessage from '../utils';
 import routes from '../routes';
 
 const initialState = {
@@ -94,6 +95,7 @@ const addChannel = ({ channel }) => async (dispatch) => {
     });
   } catch (e) {
     dispatch(addChannelFailure());
+    selectErrorMessage(e);
     throw e;
   }
 };
@@ -111,6 +113,7 @@ const renameChannel = ({ id, channel }) => async (dispatch) => {
     });
   } catch (e) {
     dispatch(renameChannelFailure());
+    selectErrorMessage(e);
     throw e;
   }
 };
@@ -122,6 +125,7 @@ const removeChannel = ({ id }) => async (dispatch) => {
     await axios.delete(path);
   } catch (e) {
     dispatch(removeChannelFailure());
+    selectErrorMessage(e);
     throw e;
   }
 };
