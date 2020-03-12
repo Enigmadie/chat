@@ -2,89 +2,39 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import _ from 'lodash';
 import selectErrorMessage from '../utils';
 import routes from '../routes';
 
 const initialState = {
-  data: { byId: {}, allIds: [] },
-  processing: false,
+  data: [],
 };
 
 const slice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    initChannelsState(state, { payload: { channels } }) {
-      state.data = {
-        byId: _.keyBy(channels, 'id'),
-        allIds: channels.map(({ id }) => id),
-      };
-      state.processing = false;
-    },
-    addChannelRequest(state) {
-      state.processing = true;
+    initChannelsState(state, { payload }) {
+      state.data = payload;
     },
     addChannelSuccess(state, { payload: { channel } }) {
-      const { byId, allIds } = state.data;
-      const { id } = channel;
-
-      state.data = {
-        byId: { [id]: channel, ...byId },
-        allIds: [...allIds, id],
-      };
-      state.processing = false;
-    },
-    addChannelFailure(state) {
-      state.processing = false;
-    },
-    renameChannelRequest(state) {
-      state.processing = true;
+      state.data = [...state.data, channel];
     },
     renameChannelSuccess(state, { payload: { channelId, name } }) {
-      const { byId, allIds } = state.data;
-      const currentChannel = byId[channelId];
-
-      currentChannel.name = name;
-      state.data = {
-        byId,
-        allIds,
-      };
-      state.processing = false;
-    },
-    renameChannelFailure(state) {
-      state.processing = false;
-    },
-    removeChannelRequest(state) {
-      state.processing = true;
+      state.data.map((el) => {
+        if (el.id === channelId) {
+          el.name = name;
+        }
+        return el;
+      });
     },
     removeChannelSuccess(state, { payload: { channelId } }) {
-      const { byId, allIds } = state.data;
-      state.data = {
-        byId: _.omit(byId, channelId),
-        allIds: _.without(allIds, channelId),
-      };
-      state.processing = false;
-    },
-    removeChannelFailure(state) {
-      state.processing = false;
+      state.data.filter(({ id }) => id !== channelId);
     },
   },
 });
 
-const {
-  addChannelRequest,
-  addChannelFailure,
-  renameChannelRequest,
-  renameChannelFailure,
-  removeChannelRequest,
-  removeChannelFailure,
-} = slice.actions;
-
-const addChannel = ({ channel }) => async (dispatch) => {
+const addChannel = ({ channel }) => async () => {
   const path = routes.channelsPath();
-
-  dispatch(addChannelRequest());
   try {
     await axios.post(path, {
       data: {
@@ -94,15 +44,13 @@ const addChannel = ({ channel }) => async (dispatch) => {
       },
     });
   } catch (e) {
-    dispatch(addChannelFailure());
     selectErrorMessage(e);
     throw e;
   }
 };
 
-const renameChannel = ({ id, channel }) => async (dispatch) => {
+const renameChannel = ({ id, channel }) => async () => {
   const path = routes.channelPath(id);
-  dispatch(renameChannelRequest());
   try {
     await axios.patch(path, {
       data: {
@@ -112,19 +60,16 @@ const renameChannel = ({ id, channel }) => async (dispatch) => {
       },
     });
   } catch (e) {
-    dispatch(renameChannelFailure());
     selectErrorMessage(e);
     throw e;
   }
 };
 
-const removeChannel = ({ id }) => async (dispatch) => {
+const removeChannel = ({ id }) => async () => {
   const path = routes.channelPath(id);
-  dispatch(removeChannelRequest());
   try {
     await axios.delete(path);
   } catch (e) {
-    dispatch(removeChannelFailure());
     selectErrorMessage(e);
     throw e;
   }

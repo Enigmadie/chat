@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import cn from 'classnames';
@@ -19,6 +20,7 @@ const ModalChannel = ({
   addChannel,
   renameChannel,
   removeChannel,
+  removeChannelMessages,
 }) => {
   const { title, button, hasBodyInput } = modalSelector[modalAction];
   const actionSelector = {
@@ -28,11 +30,13 @@ const ModalChannel = ({
   };
   const { t } = useTranslation();
   const blankMsg = t('blank');
+  const isRemovingModal = modalAction === 'remove';
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
+
       <Formik
         initialValues={{
           channel: channelName,
@@ -43,11 +47,14 @@ const ModalChannel = ({
           channel: Yup.string().max(25).required(blankMsg),
         })}
 
-        onSubmit={({ channel, id }, { setSubmitting }) => {
+        onSubmit={async ({ channel, id }) => {
           const currentAction = actionSelector[modalAction];
-          currentAction({ id, channel });
+          await currentAction({ id, channel });
+          if (isRemovingModal) {
+            removeChannelMessages({ id });
+          }
           setChannelName('');
-          setSubmitting(false);
+          onHide();
         }}
       >
         {({
@@ -59,7 +66,6 @@ const ModalChannel = ({
           const isInvalidChannel = errors.channel && touched.channel;
           const isDisabled = isInvalidChannel || isSubmitting;
 
-          const isRemovingModal = modalAction === 'remove';
           const buttonVariant = cn({
             danger: isRemovingModal,
             dark: !isRemovingModal,
@@ -89,10 +95,11 @@ const ModalChannel = ({
                 )}
               </Modal.Body>
               <Modal.Footer>
+                {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
                 <Button variant="secondary" onClick={onHide}>
                   Close
                 </Button>
-                <Button type="submit" disabled={isDisabled} variant={buttonVariant} onClick={onHide}>
+                <Button type="submit" disabled={isDisabled} variant={buttonVariant}>
                   {button}
                 </Button>
               </Modal.Footer>
@@ -100,6 +107,7 @@ const ModalChannel = ({
           );
         }}
       </Formik>
+
     </Modal>
   );
 };

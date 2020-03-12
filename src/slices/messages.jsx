@@ -2,55 +2,31 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import _ from 'lodash';
 import selectErrorMessage from '../utils';
 import routes from '../routes';
 
 const initialState = {
-  data: { byId: {}, allIds: [] },
-  processing: false,
+  data: [],
 };
 
 const slice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    initMessagesState(state, { payload: { messages } }) {
-      state.data = {
-        byId: _.keyBy(messages, 'id'),
-        allIds: messages.map((el) => el.id),
-      };
-      state.processing = false;
-    },
-    addMessageRequest(state) {
-      state.processing = true;
+    initMessagesState(state, { payload }) {
+      state.data = payload;
     },
     addMessageSuccess(state, { payload: { message } }) {
-      const { byId, allIds } = state.data;
-      const { id } = message;
-
-      state.data = {
-        byId: { [id]: message, ...byId },
-        allIds: [...allIds, id],
-      };
-
-      state.processing = false;
+      state.data = [...state.data, message];
     },
-    addMessageFailure(state) {
-      state.processing = false;
+    removeChannelMessages(state, { payload: { id } }) {
+      state.data.filter(({ channelId }) => channelId !== id);
     },
   },
 });
 
-const {
-  addMessageRequest,
-  addMessageFailure,
-} = slice.actions;
-
-const addMessage = ({ message, channelId }) => async (dispatch) => {
+const addMessage = ({ message, channelId }) => async () => {
   const path = routes.channelMessagesPath(channelId);
-
-  dispatch(addMessageRequest());
   try {
     await axios.post(path, {
       data: {
@@ -61,7 +37,6 @@ const addMessage = ({ message, channelId }) => async (dispatch) => {
       },
     });
   } catch (e) {
-    dispatch(addMessageFailure());
     selectErrorMessage(e);
     throw e;
   }

@@ -14,9 +14,11 @@ const init = (gon, cookies, io) => {
   const store = configureStore({
     reducer,
   });
-  store.dispatch(actions.initChannelsState(gon));
-  store.dispatch(actions.initMessagesState(gon));
-  store.dispatch(actions.initActiveIdState(gon));
+  const { channels, messages, currentChannelId } = gon;
+
+  store.dispatch(actions.initChannelsState(channels));
+  store.dispatch(actions.initMessagesState(messages));
+  store.dispatch(actions.initActiveIdState(currentChannelId));
 
   socket.on('newMessage', ({ data }) => {
     store.dispatch(actions.addMessageSuccess({ message: data.attributes }));
@@ -34,6 +36,7 @@ const init = (gon, cookies, io) => {
     const { name } = data.attributes;
     store.dispatch(actions.renameChannelSuccess({ channelId: data.id, name }));
   });
+
   render(
     <Provider store={store}>
       <UserContext.Provider value={cookies.get('name')}>

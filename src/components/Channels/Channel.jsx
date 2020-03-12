@@ -25,15 +25,15 @@ const Channel = ({
       <span className="pl-3">{`# ${name}`}</span>
       {removable && (
         <div className={showButtons}>
-          <button className="pr-1 border-0 button-inh" type="button" onClick={handleModalRename}>
+          <button className="pr-1 border-0 bg-transparent" type="button" onClick={handleModalRename}>
             <img
-              src="https://img.icons8.com/ios/15/000000/edit.png"
+              src="https://img.icons8.com/small/16/000000/edit.png"
               alt="rename"
             />
           </button>
-          <button className="border-0 button-inh" type="button" onClick={handleModalRemove}>
+          <button className="border-0 bg-transparent" type="button" onClick={handleModalRemove}>
             <img
-              src="https://img.icons8.com/ios/15/000000/delete-sign.png"
+              src="https://img.icons8.com/ios/16/000000/delete-sign.png"
               alt="remove"
             />
           </button>

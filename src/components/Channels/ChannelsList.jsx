@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
 
 import connect from '../../connect';
 import Channel from './Channel.jsx';
 import ModalChannel from './ModalChannel.jsx';
 
-const mapStateToProps = (state) => {
-  const {
-    channels: {
-      data: {
-        byId,
-        allIds,
-      },
-    },
-  } = state;
-
-  const channels = allIds.map((id) => byId[id]);
-  return { channels };
-};
+const mapStateToProps = ({ channels }) => ({ channels });
 
 const ChannelsList = ({ channels, switchChannel }) => {
   const [show, setShow] = useState(false);
@@ -49,9 +37,17 @@ const ChannelsList = ({ channels, switchChannel }) => {
 
   return (
     <>
-      <p className="pl-2 mb-1 ">Channels</p>
-      <ListGroup variant="flush" className="flex-grow-1">
-        {channels.map(({ id, name, removable }) => (
+      <Row className="justify-content-between mx-0 px-2">
+        <p className="pl-2 mb-1 ">Channels</p>
+        <button onClick={handleModalAdd} className="pr-2 border-0 bg-transparent" type="button">
+          <img
+            src="https://img.icons8.com/ios/20/000000/plus.png"
+            alt="add"
+          />
+        </button>
+      </Row>
+      <ListGroup variant="flush" className="overflow-auto flex-grow-1">
+        {channels.data.map(({ id, name, removable }) => (
           <Channel
             key={id}
             name={name}
@@ -65,9 +61,6 @@ const ChannelsList = ({ channels, switchChannel }) => {
           />
         ))}
       </ListGroup>
-      <Button onClick={handleModalAdd} variant="secondary" size="lg" className="rounded-0" block>
-        + Add new channel
-      </Button>
       <ModalChannel
         show={show}
         onHide={handleClose}
