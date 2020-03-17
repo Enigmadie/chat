@@ -5,7 +5,7 @@ const resources = {
   en: {
     translation: {
       blank: 'Can\'t be blank',
-      network: 'You\'r device lost it\'s internet connection',
+      network: 'You\'r device lost it\'s internet connection. \n You can try reloading the page',
       server: 'Server error at the moment',
     },
   },

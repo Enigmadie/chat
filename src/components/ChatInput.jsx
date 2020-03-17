@@ -8,14 +8,16 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import connect from '../connect';
 
-const mapStateToProps = ({ activeChannelId }) => ({
+const mapStateToProps = ({ messages, activeChannelId }) => ({
   channelId: activeChannelId.id,
+  validationState: messages.validationState,
 });
 
 const ChatInput = ({
   name,
   addMessage,
   channelId,
+  validationState,
 }) => {
   const { t } = useTranslation();
   const blankMsg = t('blank');
@@ -37,7 +39,8 @@ const ChatInput = ({
       >
         {({ isSubmitting, errors, touched }) => {
           const isInvalidMessage = errors.message && touched.message;
-          const isDisabled = isInvalidMessage || isSubmitting;
+          const isValidState = validationState === 'valid';
+          const isDisabled = isInvalidMessage || isSubmitting || !isValidState;
 
           const inputClass = cn({
             'col-10 form-control': true,

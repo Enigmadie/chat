@@ -5,9 +5,10 @@ import connect from '../connect';
 
 
 const mapStateToProps = ({ channels, messages, activeChannelId }) => {
-  const activeChannel = _.find(channels.data, activeChannelId);
+  const { id } = activeChannelId;
+  const activeChannel = _.find(channels.data, { id });
   const countMessages = messages.data
-    .filter(({ channelId }) => channelId === activeChannelId.id)
+    .filter(({ channelId }) => channelId === id)
     .length;
 
   return { countMessages, channel: activeChannel };

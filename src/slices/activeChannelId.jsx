@@ -2,19 +2,21 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-  id: 0,
-};
-
 const slice = createSlice({
   name: 'activeChannelId',
-  initialState,
+  initialState: {
+    prevId: 1,
+    id: 1,
+  },
   reducers: {
     initActiveIdState(state, { payload }) {
       state.id = payload;
     },
     switchChannel(state, { payload: { currentChannelId } }) {
-      state.id = currentChannelId;
+      if (state.id !== currentChannelId) {
+        state.prevId = state.id;
+        state.id = currentChannelId;
+      }
     },
   },
 });

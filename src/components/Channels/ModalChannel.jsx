@@ -10,8 +10,15 @@ import { useTranslation } from 'react-i18next';
 import connect from '../../connect';
 import modalSelector from './modal-selector';
 
+const mapStateToProps = ({ channels, activeChannelId }) => ({
+  validationState: channels.validationState,
+  prevId: activeChannelId.prevId,
+});
+
 const ModalChannel = ({
   show,
+  prevId,
+  validationState,
   onHide,
   modalAction,
   channelName,
@@ -21,6 +28,7 @@ const ModalChannel = ({
   renameChannel,
   removeChannel,
   removeChannelMessages,
+  switchChannel,
 }) => {
   const { title, button, hasBodyInput } = modalSelector[modalAction];
   const actionSelector = {
@@ -31,6 +39,12 @@ const ModalChannel = ({
   const { t } = useTranslation();
   const blankMsg = t('blank');
   const isRemovingModal = modalAction === 'remove';
+
+  const handleModalCancel = () => {
+    setChannelName('');
+    onHide();
+  };
+
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -49,10 +63,11 @@ const ModalChannel = ({
 
         onSubmit={async ({ channel, id }) => {
           const currentAction = actionSelector[modalAction];
-          await currentAction({ id, channel });
           if (isRemovingModal) {
+            switchChannel({ currentChannelId: prevId });
             removeChannelMessages({ id });
           }
+          await currentAction({ id, channel });
           setChannelName('');
           onHide();
         }}
@@ -64,7 +79,8 @@ const ModalChannel = ({
           touched,
         }) => {
           const isInvalidChannel = errors.channel && touched.channel;
-          const isDisabled = isInvalidChannel || isSubmitting;
+          const isValidState = validationState === 'valid';
+          const isDisabled = isInvalidChannel || isSubmitting || !isValidState;
 
           const buttonVariant = cn({
             danger: isRemovingModal,
@@ -96,7 +112,7 @@ const ModalChannel = ({
               </Modal.Body>
               <Modal.Footer>
                 {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
-                <Button variant="secondary" onClick={onHide}>
+                <Button variant="secondary" onClick={() => handleModalCancel()}>
                   Close
                 </Button>
                 <Button type="submit" disabled={isDisabled} variant={buttonVariant}>
@@ -112,4 +128,4 @@ const ModalChannel = ({
   );
 };
 
-export default connect(null)(ModalChannel);
+export default connect(mapStateToProps)(ModalChannel);

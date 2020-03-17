@@ -37,10 +37,12 @@ const init = (gon, cookies, io) => {
     store.dispatch(actions.renameChannelSuccess({ channelId: data.id, name }));
   });
 
+  const name = cookies.get('name');
+
   render(
     <Provider store={store}>
-      <UserContext.Provider value={cookies.get('name')}>
-        <App />
+      <UserContext.Provider value={name}>
+        <App name={name} />
       </UserContext.Provider>
     </Provider>,
     document.getElementById('chat'),

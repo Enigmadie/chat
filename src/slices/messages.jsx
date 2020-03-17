@@ -2,30 +2,36 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import _ from 'lodash';
 import selectErrorMessage from '../utils';
 import routes from '../routes';
 
-const initialState = {
-  data: [],
-};
-
 const slice = createSlice({
   name: 'messages',
-  initialState,
+  initialState: {
+    data: [],
+    validationState: 'valid',
+  },
   reducers: {
     initMessagesState(state, { payload }) {
       state.data = payload;
     },
     addMessageSuccess(state, { payload: { message } }) {
-      state.data = [...state.data, message];
+      state.data.push(message);
+      state.validationState = 'valid';
+    },
+    addMessageFailure(state) {
+      state.validationState = 'invalid';
     },
     removeChannelMessages(state, { payload: { id } }) {
-      state.data.filter(({ channelId }) => channelId !== id);
+      _.remove(state.data, ({ channelId }) => id === channelId);
     },
   },
 });
 
-const addMessage = ({ message, channelId }) => async () => {
+const { addMessageFailure } = slice.actions;
+
+const addMessage = ({ message, channelId }) => async (dispatch) => {
   const path = routes.channelMessagesPath(channelId);
   try {
     await axios.post(path, {
@@ -37,6 +43,7 @@ const addMessage = ({ message, channelId }) => async () => {
       },
     });
   } catch (e) {
+    dispatch(addMessageFailure());
     selectErrorMessage(e);
     throw e;
   }
