@@ -28,13 +28,13 @@ const init = (gon, cookies, io) => {
     store.dispatch(actions.addChannelSuccess({ channel: data.attributes }));
   });
 
-  socket.on('removeChannel', ({ data }) => {
-    store.dispatch(actions.removeChannelSuccess({ channelId: data.id }));
+  socket.on('removeChannel', ({ data: { id } }) => {
+    store.dispatch(actions.removeChannelSuccess({ id }));
   });
 
-  socket.on('renameChannel', ({ data }) => {
-    const { name } = data.attributes;
-    store.dispatch(actions.renameChannelSuccess({ channelId: data.id, name }));
+  socket.on('renameChannel', ({ data: { id, attributes } }) => {
+    const { name } = attributes;
+    store.dispatch(actions.renameChannelSuccess({ id, name }));
   });
 
   const name = cookies.get('name');

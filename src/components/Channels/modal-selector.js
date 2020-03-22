@@ -5,7 +5,7 @@ export default {
     hasBodyInput: true,
   },
   rename: {
-    title: 'Rename channel name',
+    title: 'Rename channel',
     button: 'Submit',
     hasBodyInput: true,
   },

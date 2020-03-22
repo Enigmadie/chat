@@ -10,14 +10,10 @@ import { useTranslation } from 'react-i18next';
 import connect from '../../connect';
 import modalSelector from './modal-selector';
 
-const mapStateToProps = ({ channels, activeChannelId }) => ({
-  validationState: channels.validationState,
-  prevId: activeChannelId.prevId,
-});
+const mapStateToProps = ({ channels }) => ({ validationState: channels.validationState });
 
 const ModalChannel = ({
   show,
-  prevId,
   validationState,
   onHide,
   modalAction,
@@ -27,8 +23,6 @@ const ModalChannel = ({
   addChannel,
   renameChannel,
   removeChannel,
-  removeChannelMessages,
-  switchChannel,
 }) => {
   const { title, button, hasBodyInput } = modalSelector[modalAction];
   const actionSelector = {
@@ -46,7 +40,7 @@ const ModalChannel = ({
   };
 
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} onHide={handleModalCancel}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -63,10 +57,6 @@ const ModalChannel = ({
 
         onSubmit={async ({ channel, id }) => {
           const currentAction = actionSelector[modalAction];
-          if (isRemovingModal) {
-            switchChannel({ currentChannelId: prevId });
-            removeChannelMessages({ id });
-          }
           await currentAction({ id, channel });
           setChannelName('');
           onHide();
@@ -112,7 +102,7 @@ const ModalChannel = ({
               </Modal.Body>
               <Modal.Footer>
                 {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
-                <Button variant="secondary" onClick={() => handleModalCancel()}>
+                <Button variant="secondary" onClick={handleModalCancel}>
                   Close
                 </Button>
                 <Button type="submit" disabled={isDisabled} variant={buttonVariant}>

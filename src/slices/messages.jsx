@@ -5,6 +5,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import selectErrorMessage from '../utils';
 import routes from '../routes';
+import { actions as channelActions } from './channels';
 
 const slice = createSlice({
   name: 'messages',
@@ -23,7 +24,9 @@ const slice = createSlice({
     addMessageFailure(state) {
       state.validationState = 'invalid';
     },
-    removeChannelMessages(state, { payload: { id } }) {
+  },
+  extraReducers: {
+    [channelActions.removeChannelSuccess](state, { payload: { id } }) {
       _.remove(state.data, ({ channelId }) => id === channelId);
     },
   },

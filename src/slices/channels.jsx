@@ -23,21 +23,16 @@ const slice = createSlice({
     addChannelFailure(state) {
       state.validationState = 'invalid';
     },
-    renameChannelSuccess(state, { payload: { channelId, name } }) {
-      const index = _.findIndex(state.data, { id: channelId });
-      const curentChannel = state.data[index];
-
-      state.data[index] = {
-        ...curentChannel,
-        name,
-      };
+    renameChannelSuccess(state, { payload: { id, name } }) {
+      const curentChannel = _.find(state.data, { id });
+      curentChannel.name = name;
       state.validationState = 'valid';
     },
     renameChannelFailure(state) {
       state.validationState = 'invalid';
     },
-    removeChannelSuccess(state, { payload: { channelId } }) {
-      _.remove(state.data, ({ id }) => id === channelId);
+    removeChannelSuccess(state, { payload: { id } }) {
+      _.remove(state.data, (el) => el.id === id);
       state.validationState = 'valid';
     },
     removeChannelFailure(state) {

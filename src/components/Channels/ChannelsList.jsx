@@ -19,14 +19,16 @@ const ChannelsList = ({ channels, switchChannel }) => {
     setShow(true);
   };
 
-  const handleModalRename = (id, name) => {
+  const handleModalRename = (id, name) => (e) => {
+    e.stopPropagation();
     setChannelId(id);
     setChannelName(name);
     setModalAction('rename');
     setShow(true);
   };
 
-  const handleModalRemove = (id, name) => {
+  const handleModalRemove = (id, name) => (e) => {
+    e.stopPropagation();
     setChannelId(id);
     setChannelName(name);
     setModalAction('remove');
@@ -53,8 +55,8 @@ const ChannelsList = ({ channels, switchChannel }) => {
             name={name}
             removable={removable}
             onClick={() => switchChannel({ currentChannelId: id })}
-            handleModalRename={() => handleModalRename(id, name)}
-            handleModalRemove={() => handleModalRemove(id, name)}
+            handleModalRename={handleModalRename(id, name)}
+            handleModalRemove={handleModalRemove(id, name)}
             className="list-group"
             id="list-tab"
             role="tablist"

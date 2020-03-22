@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Row from 'react-bootstrap/Row';
+import cn from 'classnames';
 import connect from '../connect';
 
 
@@ -10,15 +11,19 @@ const mapStateToProps = ({ channels, messages, activeChannelId }) => {
   const countMessages = messages.data
     .filter(({ channelId }) => channelId === id)
     .length;
-
   return { countMessages, channel: activeChannel };
 };
 
 const ChatHeader = ({ countMessages, channel }) => {
-  const channelName = `# ${channel.name}`;
+  const channelName = channel ? `# ${channel.name}` : 'deleted';
+  const channelCn = cn({
+    'm-0 py-1 pl-3 font-weight-bold': true,
+    'text-muted': !channel,
+  });
+
   return (
     <Row className="border mx-0 justify-content-between">
-      <h5 className="m-0 py-1 pl-3 font-weight-bold">
+      <h5 className={channelCn}>
         {channelName}
       </h5>
       <Row className="mx-0 pr-4 pt-1">
