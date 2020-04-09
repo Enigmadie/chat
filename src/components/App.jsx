@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import { toast } from 'react-toastify';
 
 import ChannelsList from './Channels/ChannelsList';
+import Modal from './Modals/index.jsx';
 import ChatLog from './ChatLog';
 import ChatInput from './ChatInput';
 
@@ -27,6 +28,7 @@ const App = ({ name }) => (
       <ChatLog />
       <ChatInput name={name} />
     </Col>
+    <Modal />
   </Row>
 );
 

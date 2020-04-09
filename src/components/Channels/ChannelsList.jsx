@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 
 import connect from '../../connect';
 import Channel from './Channel.jsx';
-import ModalChannel from '../Modals/index.jsx';
 
 const mapStateToProps = ({ channels }) => ({ channels });
 
@@ -36,7 +35,6 @@ const ChannelsList = ({ channels, switchChannel, showModal }) => (
         />
       ))}
     </ListGroup>
-    <ModalChannel />
   </>
 );
 
