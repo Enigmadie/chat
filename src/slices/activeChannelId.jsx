@@ -5,7 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const slice = createSlice({
   name: 'activeChannelId',
   initialState: {
-    id: 0,
+    id: 1,
   },
   reducers: {
     initActiveIdState(state, { payload }) {

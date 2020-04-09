@@ -11,16 +11,20 @@ import messages, { actions as messagesActions, addMessage } from './messages.jsx
 
 import activeChannelId, { actions as activeChannelIdActions } from './activeChannelId.jsx';
 
+import uiModal, { actions as uiModalActions } from './uiModal.jsx';
+
 export default combineReducers({
   channels,
   messages,
   activeChannelId,
+  uiModal,
 });
 
 const actions = {
   ...channelsActions,
   ...messagesActions,
   ...activeChannelIdActions,
+  ...uiModalActions,
 };
 
 const asyncActions = {

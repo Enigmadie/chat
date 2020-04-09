@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import ChannelsList from './Channels/ChannelsList';
 import ChatLog from './ChatLog';
 import ChatInput from './ChatInput';
-import ChatHeader from './ChatHeader';
 
 toast.configure({
   position: 'top-right',
@@ -25,7 +24,6 @@ const App = ({ name }) => (
       <ChannelsList />
     </Col>
     <Col xs={8} className="d-flex flex-column border p-0 bg-white h-100">
-      <ChatHeader />
       <ChatLog />
       <ChatInput name={name} />
     </Col>
