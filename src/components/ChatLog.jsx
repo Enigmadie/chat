@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import Col from 'react-bootstrap/Col';
 import connect from '../connect';
 
-const mapStateToProps = ({ messages, activeChannelId }) => ({ messages, activeChannelId });
+const ChatLog = () => {
+  const { messages, activeChannelId } = useSelector((state) => state);
 
-const ChatLog = ({ messages, activeChannelId }) => {
   useEffect(() => {
     const logContainer = document.querySelector('.chat-log');
     logContainer.scrollTop = logContainer.scrollHeight;
@@ -23,4 +25,4 @@ const ChatLog = ({ messages, activeChannelId }) => {
   );
 };
 
-export default connect(mapStateToProps)(ChatLog);
+export default connect()(ChatLog);
