@@ -10,11 +10,6 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import connect from '../connect';
 
-// const mapStateToProps = ({ messages, activeChannelId }) => ({
-//   channelId: activeChannelId.id,
-//   validationState: messages.validationState,
-// });
-
 const ChatInput = ({
   name,
   addMessage,

@@ -19,6 +19,7 @@ const renameModal = ({
 }) => {
   const { t } = useTranslation();
   const blankMsg = t('blank');
+  const modalTitle = t('renameModal');
 
   const { channel, show } = uiModal;
   const { name, id } = channel;
@@ -57,9 +58,9 @@ const renameModal = ({
   });
 
   return (
-    <Modal show={show} onHide={() => hideModal()}>
+    <Modal show={show} onHide={hideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Rename channel</Modal.Title>
+        <Modal.Title>{modalTitle}</Modal.Title>
       </Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
@@ -74,7 +75,7 @@ const renameModal = ({
         </Modal.Body>
         <Modal.Footer>
           {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
-          <Button variant="secondary" onClick={() => hideModal()}>
+          <Button variant="secondary" onClick={hideModal}>
             Close
           </Button>
           <Button type="submit" disabled={isDisabled} variant="dark">

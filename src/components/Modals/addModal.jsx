@@ -19,6 +19,7 @@ const addModal = ({
 }) => {
   const { t } = useTranslation();
   const blankMsg = t('blank');
+  const modalTitle = t('addModal');
 
   const { show } = uiModal;
 
@@ -54,9 +55,9 @@ const addModal = ({
   });
 
   return (
-    <Modal show={show} onHide={() => hideModal()}>
+    <Modal show={show} onHide={hideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Add channel name</Modal.Title>
+        <Modal.Title>{modalTitle}</Modal.Title>
       </Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
@@ -71,7 +72,7 @@ const addModal = ({
         </Modal.Body>
         <Modal.Footer>
           {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
-          <Button variant="secondary" onClick={() => hideModal()}>
+          <Button variant="secondary" onClick={hideModal}>
             Close
           </Button>
           <Button type="submit" disabled={isDisabled} variant="dark">

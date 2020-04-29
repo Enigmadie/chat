@@ -7,6 +7,9 @@ const resources = {
       blank: 'Can\'t be blank',
       network: 'You\'r device lost it\'s internet connection. \n You can try reloading the page',
       server: 'Server error at the moment',
+      addModal: 'Add channel name',
+      removeModal: 'Remove channel',
+      renameModal: 'Rename channel',
     },
   },
 };

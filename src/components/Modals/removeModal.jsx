@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import connect from '../../connect';
 
@@ -16,6 +17,8 @@ const removeModal = ({
 }) => {
   const { channel, show } = uiModal;
   const { id, name } = channel;
+  const { t } = useTranslation();
+  const modalTitle = t('removeModal');
 
   const formik = useFormik({
     initialValues: {},
@@ -34,9 +37,9 @@ const removeModal = ({
   const isDisabled = isSubmitting || !isValidState;
 
   return (
-    <Modal show={show} onHide={() => hideModal()}>
+    <Modal show={show} onHide={hideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Remove channel</Modal.Title>
+        <Modal.Title>{modalTitle}</Modal.Title>
       </Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body>
@@ -50,7 +53,7 @@ const removeModal = ({
         </Modal.Body>
         <Modal.Footer>
           {isSubmitting && <Spinner animation="border" variant="dark" className="ml-3" />}
-          <Button variant="secondary" onClick={() => hideModal()}>
+          <Button variant="secondary" onClick={hideModal}>
             Close
           </Button>
           <Button type="submit" disabled={isDisabled} variant="danger">
